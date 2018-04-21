@@ -1,5 +1,6 @@
 package ee.cgi_summer_hw;
 
+import android.media.Rating;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -22,7 +23,13 @@ public class DetailActivity extends AppCompatActivity {
         mDescription.setText(movie.getDescription());
 
         TextView mYearText= findViewById(R.id.infoYear);
-        mYearText.setText(movie.getYear());
+        mYearText.setText("Year: "+movie.getYear());
+
+        TextView mRatingText= findViewById(R.id.infoRating);
+        mRatingText.setText("Rating "+Integer.toString(movie.getRating())+"/5");
+
+        TextView mCategoryText= findViewById(R.id.infoCategory);
+        mCategoryText.setText("Category: "+movie.getCategory().getName());
 
 
     }

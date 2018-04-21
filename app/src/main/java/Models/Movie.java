@@ -12,14 +12,13 @@ public class Movie implements Serializable {
     private String title;
     private String description;
     private String year;
-
+    private int rating;
+    private Category category;
     private int categoryId;
 
 
     public Movie() {
     }
-
-
 
 
     public int getCategoryId() {
@@ -63,7 +62,21 @@ public class Movie implements Serializable {
         this.description = description;
     }
 
+    public int getRating() {
+        return rating;
+    }
 
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
 
 }

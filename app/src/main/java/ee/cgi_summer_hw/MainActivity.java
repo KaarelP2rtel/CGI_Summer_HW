@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = MainActivity.class.getSimpleName();
     ListView mListView;
     SwipeRefreshLayout mRefresh;
+    ContentProvider contentProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.mainListView);
         mRefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
 
-        ContentProvider contentProvider = new ContentProvider();
-       final Context context = this;
+        contentProvider = new ContentProvider();
+        final Context context = this;
 
         final MovieListAdapter adapter = new MovieListAdapter(this, contentProvider.getMovieList());
         mListView.setAdapter(adapter);
@@ -45,18 +46,18 @@ public class MainActivity extends AppCompatActivity {
                 Movie m = adapter.getItem(position);
                 Intent i = new Intent(context, DetailActivity.class);
 
-                i.putExtra("movie",m);
+                i.putExtra("movie", m);
                 startActivity(i);
 
             }
         });
 
 
-
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 Log.d(TAG, "onRefresh: ");
+                contentProvider.reload();
                 mRefresh.setRefreshing(false);
             }
         });

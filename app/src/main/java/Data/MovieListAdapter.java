@@ -51,14 +51,19 @@ public class MovieListAdapter extends BaseAdapter {
 
         Movie m = getItem(position);
 
-        TextView titleText = (TextView) rowView.findViewById(R.id.rowTitle);
-        titleText.setText(m.getTitle());
+        TextView mTitleText = rowView.findViewById(R.id.rowTitle);
+        mTitleText.setText(m.getTitle());
 
-        TextView descriptionText = (TextView) rowView.findViewById(R.id.rowDescription);
-        descriptionText.setText(m.getDescription());
+        TextView mRatingText = rowView.findViewById(R.id.rowRating);
+        mRatingText.setText(Integer.toString(m.getRating())+"/5");
 
-        TextView yearText = (TextView) rowView.findViewById(R.id.rowYear);
-        yearText.setText(m.getYear());
+        TextView mYearText = rowView.findViewById(R.id.rowYear);
+        mYearText.setText(m.getYear());
+
+        TextView mCategorytext = rowView.findViewById(R.id.rowCategory);
+        mCategorytext.setText(m.getCategory().getName());
+
+
 
 
         return rowView;
