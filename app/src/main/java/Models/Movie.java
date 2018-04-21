@@ -11,7 +11,7 @@ public class Movie implements Serializable {
     private int movieId;
     private String title;
     private String description;
-    private Date year;
+    private String year;
 
     private int categoryId;
 
@@ -30,11 +30,11 @@ public class Movie implements Serializable {
         this.categoryId = categoryId;
     }
 
-    public Date getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(Date year) {
+    public void setYear(String year) {
         this.year = year;
     }
 

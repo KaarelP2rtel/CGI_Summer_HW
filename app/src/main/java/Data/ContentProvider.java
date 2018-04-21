@@ -1,6 +1,7 @@
 package Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import Models.Category;
@@ -38,6 +39,7 @@ public class ContentProvider implements Serializable {
                     "This film definitely does not exist. This is the "+Integer.toString(i)+
             " by the director John Madden");
             m.setCategoryId(i);
+            m.setYear(Integer.toString(1995+i));
 
             movieList.add(m);
 
