@@ -19,6 +19,9 @@ public class Movie implements Serializable {
     public Movie() {
     }
 
+
+
+
     public int getCategoryId() {
         return categoryId;
     }
@@ -59,6 +62,8 @@ public class Movie implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 
 
 }

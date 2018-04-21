@@ -20,7 +20,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            >
 
             <TextView
                 android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
+                android:id="@+id/infoTitle"
                 android:text="Title" />
         </LinearLayout>
 
@@ -51,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
+                android:id="@+id/infoDescription"
                 android:text="Title" />
         </LinearLayout>
         <LinearLayout
@@ -69,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
+                android:id="@+id/infoYear"
                 android:text="Category" />
         </LinearLayout>
         <LinearLayout
@@ -87,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
+                android:id="@+id/infoCategory"
                 android:text="Title" />
         </LinearLayout>
 
