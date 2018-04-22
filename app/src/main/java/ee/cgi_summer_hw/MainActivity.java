@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     IntentFilter receiverIntentFilter;
     ProgressBar mProgressBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         mProgressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
 
+
+        mProgressBar.setVisibility(View.VISIBLE);
         fetchAll();
 
 
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     adapter = new MovieListAdapter(context, ml);
                     mListView.setAdapter(adapter);
                     mRefresh.setRefreshing(false);
+
 
                 } else if (intent.getAction().equals(".ONE_DONE")) {
                     Movie m = (Movie) intent.getSerializableExtra("result");
@@ -98,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchAll() {
 
+
         Intent i = new Intent(this, ContentService.class);
         i.setAction(".FETCH_ALL");
         i.putExtra("provider", contentProvider);
@@ -123,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mRefresh.setRefreshing(false);
+
+        mProgressBar.setVisibility(View.INVISIBLE);
         this.registerReceiver(mReceiver, receiverIntentFilter);
     }
 }

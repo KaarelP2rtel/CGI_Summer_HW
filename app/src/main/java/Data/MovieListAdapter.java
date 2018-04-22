@@ -58,7 +58,7 @@ public class MovieListAdapter extends BaseAdapter {
         mTitleText.setText(m.getTitle());
 
         TextView mRatingText = rowView.findViewById(R.id.rowRating);
-        mRatingText.setText(Integer.toString(m.getRating()) + "/5");
+        mRatingText.setText(Integer.toString(m.getRating()) + "/10");
 
         TextView mYearText = rowView.findViewById(R.id.rowYear);
         mYearText.setText(m.getYear());

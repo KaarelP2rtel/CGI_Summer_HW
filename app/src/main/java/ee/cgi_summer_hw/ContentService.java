@@ -5,6 +5,10 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+
 import Data.ContentProvider;
 
 /**
@@ -21,7 +25,13 @@ public class ContentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         ContentProvider provider = (ContentProvider) intent.getSerializableExtra("provider");
-        provider.loadData();
+        try {
+            provider.loadData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Intent i = new Intent();
 
         if (intent.getAction().equals(".FETCH_ALL")) {

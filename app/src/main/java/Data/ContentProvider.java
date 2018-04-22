@@ -1,6 +1,19 @@
 package Data;
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.Serializable;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import Models.Category;
@@ -17,6 +30,8 @@ public class ContentProvider implements Serializable {
     private ArrayList<Category> categoryList;
 
     public ContentProvider() {
+        categoryList = new ArrayList<Category>();
+        movieList = new ArrayList<Movie>();
 
 
     }
@@ -24,7 +39,7 @@ public class ContentProvider implements Serializable {
     public Movie getMovieById(int id) {
         for (Movie m : movieList) {
             if (m.getMovieId() == id) {
-                m.setCategory(categoryList.get(m.getCategoryId()));
+                includeCategory(m);
                 return m;
             }
         }
@@ -32,13 +47,24 @@ public class ContentProvider implements Serializable {
         return null;
     }
 
+
     public ArrayList<Movie> getMovieList() {
+
         for (Movie m : movieList) {
-            m.setCategory(categoryList.get(m.getCategoryId()));
+            includeCategory(m);
         }
 
         return movieList;
     }
+
+    private void includeCategory(Movie movie) {
+        for (Category c : categoryList) {
+            if (movie.getCategoryId() == c.getCategoryId()) {
+                movie.setCategory(c);
+            }
+        }
+    }
+
 
     public void setMovieList(ArrayList<Movie> movieList) {
         this.movieList = movieList;
@@ -52,9 +78,73 @@ public class ContentProvider implements Serializable {
         this.categoryList = categoryList;
     }
 
-    public void loadData() {
-        loadMockData();
+    public void loadData() throws IOException, JSONException {
+
+
+        //Warning. Magic strings ahead.
+        String movieUrl = "https://api.themoviedb.org/3/discover/" +
+                "movie" +
+                "?api_key=fe6cc7f97c99aa3f5e2caef8ed4d9408" +
+                "&language=en-US" +
+                "&sort_by=popularity.desc" +
+                "&include_adult=false" +
+                "&include_video=false" +
+                "&page=1";
+        String categoryUrl = "https://api.themoviedb.org/3/" +
+                "genre/movie/list" +
+                "?api_key=fe6cc7f97c99aa3f5e2caef8ed4d9408&language=en-US";
+
+        JSONArray movieJsonArray = readJsonFromUrl(movieUrl).getJSONArray("results");
+        JSONArray categoryJsonArray = readJsonFromUrl(categoryUrl).getJSONArray("genres");
+
+
+        //Read Categories (genres) from TMDB
+        for (int j = 0; j < categoryJsonArray.length(); j++) {
+            JSONObject jsonObject = categoryJsonArray.getJSONObject(j);
+            Category c = new Category();
+            c.setCategoryId(jsonObject.getInt("id"));
+            c.setName(jsonObject.getString("name"));
+            categoryList.add(c);
+        }
+
+        //Read Movies from TMDB
+        for (int i = 0; i < movieJsonArray.length(); i++) {
+            JSONObject jsonObject = movieJsonArray.getJSONObject(i);
+            Movie m = new Movie();
+
+            m.setMovieId(jsonObject.getInt("id"));
+            m.setDescription(jsonObject.getString("overview"));
+            m.setRating((int) jsonObject.getLong("vote_average"));
+            m.setTitle(jsonObject.getString("original_title"));
+            m.setCategoryId(jsonObject.getJSONArray("genre_ids").getInt(0));
+            m.setYear(jsonObject.getString("release_date").substring(0,4));
+            movieList.add(m);
+        }
+
+
     }
+
+    private static String readAll(Reader rd) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int cp;
+        while ((cp = rd.read()) != -1) {
+            sb.append((char) cp);
+        }
+        return sb.toString();
+    }
+
+    public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+        InputStream is = new URL(url).openStream();
+        try {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            String jsonText = readAll(rd);
+            JSONObject json = new JSONObject(jsonText);
+            return json;
+        } finally {
+            is.close();
+        }
+    }
+
 
     public void loadMockData() {
 
@@ -64,9 +154,6 @@ public class ContentProvider implements Serializable {
             e.printStackTrace();
         }
 
-
-        setCategoryList(new ArrayList<Category>());
-        setMovieList(new ArrayList<Movie>());
 
         for (int i = 0; i < 10; i++) {
 

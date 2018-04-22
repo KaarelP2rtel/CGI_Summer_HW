@@ -26,10 +26,10 @@ public class DetailActivity extends AppCompatActivity {
         mYearText.setText("Year: "+movie.getYear());
 
         TextView mRatingText= findViewById(R.id.infoRating);
-        mRatingText.setText("Rating "+Integer.toString(movie.getRating())+"/5");
+        mRatingText.setText("Rating "+Integer.toString(movie.getRating())+"/10");
 
         TextView mCategoryText= findViewById(R.id.infoCategory);
-        mCategoryText.setText("Category: "+movie.getCategory().getName());
+        mCategoryText.setText(movie.getCategory().getName());
 
 
     }
