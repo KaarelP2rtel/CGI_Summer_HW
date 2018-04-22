@@ -36,15 +36,24 @@ public class ContentProvider implements Serializable {
 
     }
 
-    public Movie getMovieById(int id) {
-        for (Movie m : movieList) {
-            if (m.getMovieId() == id) {
-                includeCategory(m);
-                return m;
-            }
-        }
 
-        return null;
+    public Movie getMovieById(int id) throws IOException, JSONException {
+
+        String movieUrl = " https://api.themoviedb.org/3/movie/" + Integer.toString(id) +
+                "?api_key=fe6cc7f97c99aa3f5e2caef8ed4d9408" +
+                "&language=en-US";
+        JSONObject jsonObject = readJsonFromUrl(movieUrl);
+        Movie m = new Movie();
+
+        m.setMovieId(jsonObject.getInt("id"));
+        m.setDescription(jsonObject.getString("overview"));
+        m.setRating((int) jsonObject.getLong("vote_average"));
+        m.setTitle(jsonObject.getString("original_title"));
+        m.setCategoryId(jsonObject.getJSONArray("genres").getJSONObject(0).getInt("id"));
+        m.setYear(jsonObject.getString("release_date").substring(0, 4));
+
+        includeCategory(m);
+        return m;
     }
 
 
@@ -70,13 +79,16 @@ public class ContentProvider implements Serializable {
         this.movieList = movieList;
     }
 
+
     public ArrayList<Category> getCategoryList() {
         return categoryList;
     }
 
+
     public void setCategoryList(ArrayList<Category> categoryList) {
         this.categoryList = categoryList;
     }
+
 
     public void loadData() throws IOException, JSONException {
 
@@ -117,7 +129,7 @@ public class ContentProvider implements Serializable {
             m.setRating((int) jsonObject.getLong("vote_average"));
             m.setTitle(jsonObject.getString("original_title"));
             m.setCategoryId(jsonObject.getJSONArray("genre_ids").getInt(0));
-            m.setYear(jsonObject.getString("release_date").substring(0,4));
+            m.setYear(jsonObject.getString("release_date").substring(0, 4));
             movieList.add(m);
         }
 

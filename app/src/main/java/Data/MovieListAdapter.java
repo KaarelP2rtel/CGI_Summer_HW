@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,11 @@ public class MovieListAdapter extends BaseAdapter {
         mContext = context;
         mDataSource = items;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(mDataSource.size()==0 ||mDataSource.equals(null)){
+             Toast.makeText(mContext, "No items to show. Check connection",
+                     Toast.LENGTH_LONG).show();
+
+        }
     }
 
     @Override
@@ -49,6 +55,7 @@ public class MovieListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         // Get view for row item
         View rowView = mInflater.inflate(R.layout.list_item_movie, parent, false);
 

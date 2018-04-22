@@ -41,7 +41,13 @@ public class ContentService extends IntentService {
 
         } else if (intent.getAction().equals(".FETCH_ONE")) {
             int id = intent.getIntExtra("id", 0);
-            i.putExtra("result", provider.getMovieById(id));
+            try {
+                i.putExtra("result", provider.getMovieById(id));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             i.setAction(".ONE_DONE");
 
         }

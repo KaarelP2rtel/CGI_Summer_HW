@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -38,15 +39,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mListView = (ListView) findViewById(R.id.mainListView);
         mRefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         contentProvider = new ContentProvider();
         context = this;
         mProgressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
-
-
         mProgressBar.setVisibility(View.VISIBLE);
-        fetchAll();
+
+
+        fetchAllMovies();
 
 
         mReceiver = new BroadcastReceiver() {
@@ -62,10 +64,16 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (intent.getAction().equals(".ONE_DONE")) {
                     Movie m = (Movie) intent.getSerializableExtra("result");
-                    Intent i = new Intent(context, DetailActivity.class);
+                    if (m == null) {
+                        Toast.makeText(context, "Item not found. Check connection",
+                                Toast.LENGTH_LONG).show();
 
-                    i.putExtra("movie", m);
-                    startActivity(i);
+                    } else {
+                        Intent i = new Intent(context, DetailActivity.class);
+
+                        i.putExtra("movie", m);
+                        startActivity(i);
+                    }
                 }
                 mProgressBar.setVisibility(View.INVISIBLE);
 
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 * At this point we have to ask ourselves, why we are not using the object
                 * that is already in memory.
                 * */
-                fetchOne(adapter.getItem(position).getMovieId());
+                fetchOneMovie(adapter.getItem(position).getMovieId());
 
             }
         });
@@ -94,14 +102,14 @@ public class MainActivity extends AppCompatActivity {
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchAll();
+                fetchAllMovies();
             }
         });
 
 
     }
 
-    private void fetchAll() {
+    private void fetchAllMovies() {
 
 
         Intent i = new Intent(this, ContentService.class);
@@ -110,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         startService(i);
     }
 
-    private void fetchOne(int id) {
+    private void fetchOneMovie(int id) {
         mProgressBar.setVisibility(View.VISIBLE);
         Intent i = new Intent(this, ContentService.class);
         i.setAction(".FETCH_ONE");
