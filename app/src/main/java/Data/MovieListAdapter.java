@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import Models.Movie;
-import Models.MovieList;
 import ee.cgi_summer_hw.R;
 
 /**
@@ -18,9 +19,11 @@ import ee.cgi_summer_hw.R;
 public class MovieListAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
-    private MovieList mDataSource;
 
-    public MovieListAdapter(Context context, MovieList items) {
+
+    private ArrayList<Movie> mDataSource;
+
+    public MovieListAdapter(Context context, ArrayList<Movie> items) {
         mContext = context;
         mDataSource = items;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -55,7 +58,7 @@ public class MovieListAdapter extends BaseAdapter {
         mTitleText.setText(m.getTitle());
 
         TextView mRatingText = rowView.findViewById(R.id.rowRating);
-        mRatingText.setText(Integer.toString(m.getRating())+"/5");
+        mRatingText.setText(Integer.toString(m.getRating()) + "/5");
 
         TextView mYearText = rowView.findViewById(R.id.rowYear);
         mYearText.setText(m.getYear());
@@ -64,8 +67,8 @@ public class MovieListAdapter extends BaseAdapter {
         mCategorytext.setText(m.getCategory().getName());
 
 
-
-
         return rowView;
     }
+
+
 }

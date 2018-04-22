@@ -1,13 +1,10 @@
 package Data;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 
 import Models.Category;
-import Models.CategoryList;
 import Models.Movie;
-import Models.MovieList;
 
 /**
  * Created by kaarel on 20.04.18.
@@ -16,13 +13,57 @@ import Models.MovieList;
 public class ContentProvider implements Serializable {
 
 
-    private MovieList movieList;
-    private CategoryList categoryList;
+    private ArrayList<Movie> movieList;
+    private ArrayList<Category> categoryList;
 
     public ContentProvider() {
 
-        categoryList = new CategoryList();
-        movieList = new MovieList();
+
+    }
+
+    public Movie getMovieById(int id){
+        for(Movie m : movieList){
+            if(m.getMovieId()==id){
+                m.setCategory(categoryList.get(m.getCategoryId()));
+                return m;
+            }
+        }
+
+        return null;
+    }
+
+    public ArrayList<Movie> getMovieList() {
+        for (Movie m : movieList) {
+            m.setCategory(categoryList.get(m.getCategoryId()));
+        }
+
+        return movieList;
+    }
+
+    public void setMovieList(ArrayList<Movie> movieList) {
+        this.movieList = movieList;
+    }
+
+    public ArrayList<Category> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(ArrayList<Category> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+
+    public void loadData() {
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        setCategoryList(new ArrayList<Category>());
+        setMovieList(new ArrayList<Movie>());
 
         for (int i = 0; i < 10; i++) {
 
@@ -31,7 +72,7 @@ public class ContentProvider implements Serializable {
             Category c = new Category();
             c.setCategoryId(i);
             c.setName("Category " + Integer.toString(i));
-            categoryList.add(c);
+            this.categoryList.add(c);
 
             Movie m = new Movie();
             m.setMovieId(i);
@@ -55,34 +96,9 @@ public class ContentProvider implements Serializable {
             m.setYear(Integer.toString(1995 + i));
             m.setRating(i % 5);
 
-            movieList.add(m);
+            this.movieList.add(m);
 
 
         }
     }
-
-    public void reload() {
-    }
-
-    public MovieList getMovieList() {
-        for (Movie m : movieList) {
-            m.setCategory(categoryList.get(m.getCategoryId()));
-        }
-
-        return movieList;
-    }
-
-    public void setMovieList(MovieList movieList) {
-        this.movieList = movieList;
-    }
-
-    public CategoryList getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(CategoryList categoryList) {
-        this.categoryList = categoryList;
-    }
-
-
 }
