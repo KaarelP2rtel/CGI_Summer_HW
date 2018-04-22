@@ -21,9 +21,9 @@ public class ContentProvider implements Serializable {
 
     }
 
-    public Movie getMovieById(int id){
-        for(Movie m : movieList){
-            if(m.getMovieId()==id){
+    public Movie getMovieById(int id) {
+        for (Movie m : movieList) {
+            if (m.getMovieId() == id) {
                 m.setCategory(categoryList.get(m.getCategoryId()));
                 return m;
             }
@@ -52,8 +52,11 @@ public class ContentProvider implements Serializable {
         this.categoryList = categoryList;
     }
 
-
     public void loadData() {
+        loadMockData();
+    }
+
+    public void loadMockData() {
 
         try {
             Thread.sleep(3000);

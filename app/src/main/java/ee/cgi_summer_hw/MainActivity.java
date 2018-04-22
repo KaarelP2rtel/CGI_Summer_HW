@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     MovieListAdapter adapter;
     BroadcastReceiver mReceiver;
     IntentFilter receiverIntentFilter;
+    ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +40,9 @@ public class MainActivity extends AppCompatActivity {
         mRefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         contentProvider = new ContentProvider();
         context = this;
+        mProgressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
 
         fetchAll();
-
-
 
 
         mReceiver = new BroadcastReceiver() {
@@ -53,15 +54,15 @@ public class MainActivity extends AppCompatActivity {
                     adapter = new MovieListAdapter(context, ml);
                     mListView.setAdapter(adapter);
                     mRefresh.setRefreshing(false);
+
                 } else if (intent.getAction().equals(".ONE_DONE")) {
                     Movie m = (Movie) intent.getSerializableExtra("result");
                     Intent i = new Intent(context, DetailActivity.class);
 
                     i.putExtra("movie", m);
                     startActivity(i);
-
-
                 }
+                mProgressBar.setVisibility(View.INVISIBLE);
 
             }
         };
@@ -69,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
         receiverIntentFilter.addAction(".ALL_DONE");
         receiverIntentFilter.addAction(".ONE_DONE");
         this.registerReceiver(mReceiver, receiverIntentFilter);
-
-
 
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchAll() {
+
         Intent i = new Intent(this, ContentService.class);
         i.setAction(".FETCH_ALL");
         i.putExtra("provider", contentProvider);
@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchOne(int id) {
+        mProgressBar.setVisibility(View.VISIBLE);
         Intent i = new Intent(this, ContentService.class);
         i.setAction(".FETCH_ONE");
         i.putExtra("provider", contentProvider);
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mRefresh.setRefreshing(false);
         this.registerReceiver(mReceiver, receiverIntentFilter);
     }
 }

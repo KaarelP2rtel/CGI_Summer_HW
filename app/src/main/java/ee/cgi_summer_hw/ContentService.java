@@ -27,14 +27,15 @@ public class ContentService extends IntentService {
         if (intent.getAction().equals(".FETCH_ALL")) {
             i.putExtra("result", provider.getMovieList());
             i.setAction(".ALL_DONE");
-            sendBroadcast(i);
+
 
         } else if (intent.getAction().equals(".FETCH_ONE")) {
             int id = intent.getIntExtra("id", 0);
             i.putExtra("result", provider.getMovieById(id));
             i.setAction(".ONE_DONE");
-            sendBroadcast(i);
+
         }
+        sendBroadcast(i);
 
 
     }
